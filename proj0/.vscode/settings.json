@@ -1,0 +1,10 @@
+{
+    "java.project.sourcePaths": [
+        "."
+    ],
+    "java.project.referencedLibraries": [
+        "javalib\\hamcrest-core-1.3.jar",
+        "javalib\\junit-4.12.jar",
+        "javalib\\ucb.jar"
+    ]
+}
