@@ -5,8 +5,9 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author potaxo 
  */
+@SuppressWarnings("deprecation")
 public class Model extends Observable {
     /** Current contents of the board. */
     private Board board;
@@ -137,7 +138,13 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        for (int col = 0; col < b.size(); col += 1) {
+            for (int row = 0; row < b.size(); row += 1) {
+                if (b.tile(col, row) == null) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -147,7 +154,14 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        for (int col = 0; col < b.size(); col += 1) {
+            for (int row = 0; row < b.size(); row += 1) {
+                Tile t = b.tile(col, row);
+                if (t != null && t.value() == MAX_PIECE) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -158,7 +172,36 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        // Check the board whether have the empty space
+        if (emptySpaceExists(b)) {
+            return true;
+        } else {         //check whether there are two adjacent tiles with the same value
+            for (int col = 0; col < b.size(); col += 1) {
+                for (int row  = 0; row < b.size(); row += 1) {
+                    Tile t = b.tile(col, row);
+                    if (col + 1 < b.size() && row + 1 < b.size()) {
+                        Tile tUp = b.tile(col, row+1);
+                        Tile tRight = b.tile(col + 1, row);
+                        if (t.value() == tUp.value() || t.value() == tRight.value()) {
+                            return true;
+                        }
+                    } else if (row == b.size() - 1 && col != b.size() - 1) {
+                        Tile tRight = b.tile(col + 1, row);
+                        if (t.value() == tRight.value()) {
+                            return true;
+                        }
+                    } else {
+                        if (row + 1 < b.size()) {
+                        Tile tUp = b.tile(col, row+1);
+                        if (t.value() == tUp.value()) {
+                            return true;    
+                        }
+                        }
+                    }
+                }
+            }     
+        }
+        
         return false;
     }
 
@@ -180,6 +223,7 @@ public class Model extends Observable {
         }
         String over = gameOver() ? "over" : "not over";
         out.format("] %d (max: %d) (game is %s) %n", score(), maxScore(), over);
+        out.close();
         return out.toString();
     }
 
