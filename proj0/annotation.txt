@@ -1,0 +1,4 @@
+Emmmm, I'm little bit confused... I actually finish the work,
+although the algorithm is sort of different from others.
+But the testfile(moveuptest and modeltest) is always yell at me that I do all wrong..
+Whatever, at least it's done lol(it works well when I test it).
