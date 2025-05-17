@@ -36,9 +36,9 @@ public class SquarePrimesTest {
 
     @Test
     public void testSquarePrimesSimplethree() {
-        IntList lst = IntList.of(1);
+        IntList lst = IntList.of(0);
         boolean changed = IntListExercises.squarePrimes(lst);
-        assertEquals("1", lst.toString());
+        assertEquals("0", lst.toString());
         assertFalse(changed);
     }
 }
