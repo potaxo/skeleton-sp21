@@ -16,13 +16,29 @@ public class ArrayDeque<T> implements Deque<T> {
     }
 
 
-    public void resize(int capacity) {
+    /* public void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
         if (nl == 0 && nf ==  arraySize - 1) {
             System.arraycopy(items, 0, a, 0, size);
         } else {
             System.arraycopy(items, nf + 1, a, 0, size - (nf + 1));
             System.arraycopy(items, 0, a, size - (nf + 1), nl);
+        }
+        items = a;
+        arraySize = capacity;
+        nf = arraySize - 1;
+        nl = size;
+    } */
+
+    public void resize(int capacity) {
+        T[] a = (T[]) new Object[capacity];
+        int f = updateBoundary(nf + 1);
+        int l = updateBoundary(nl - 1);
+        if (f < l) {
+            System.arraycopy(items, f, a, 0, l - f + 1);
+        } else {
+            System.arraycopy(items, f, a, 0, size - f);
+            System.arraycopy(items, 0, a, size - f, updateBoundary(l + 1));
         }
         items = a;
         arraySize = capacity;
@@ -100,7 +116,14 @@ public class ArrayDeque<T> implements Deque<T> {
         items[f] = null;
         nf = updateBoundary(nf + 1);
         size--;
+        checkResize();
         return tem;
+    }
+
+    public void checkResize() {
+        if (size < arraySize / 4 && arraySize > 8) {
+            resize(arraySize / 2);
+        }
     }
 
     @Override
@@ -114,6 +137,7 @@ public class ArrayDeque<T> implements Deque<T> {
         items[l] = null;
         nl = updateBoundary(nl - 1);
         size--;
+        checkResize();
         return tem;
     }
 
