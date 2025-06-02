@@ -40,6 +40,7 @@ public interface Deque<T> {
      *
      * @return the first item
      * @return null if the deque is empty
+     */
     public T removeFirst();
 
     /**
