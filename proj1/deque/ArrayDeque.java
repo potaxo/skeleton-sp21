@@ -1,6 +1,7 @@
 package deque;
+import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] items;
     private int nf; // next first
     private int nl; // next last
@@ -148,6 +149,55 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         int f = updateBoundary(nf + 1);
         return items[updateBoundary(f + index)];
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int wizPos;
+
+        public ArrayDequeIterator() {
+            wizPos = updateBoundary(nf + 1);
+        }
+
+        public boolean hasNext() {
+            return wizPos != nl;
+        }
+
+        public T next() {
+            T returnItem = items[wizPos];
+            wizPos = updateBoundary(wizPos += 1);
+            return returnItem;
+        }
+    }
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Deque)) {
+            return false;
+        }
+        Deque<T> other = (Deque<T>) o;
+        if (other.size() != other.size()) {
+            return false;
+        }
+
+        int max = other.size();
+        for (int x = 0; x < size; x++) {
+            if (!(this.get(x).equals(other.get(x)))) {
+                return false;
+            }
+
+        }
+        return true;
     }
 
 }

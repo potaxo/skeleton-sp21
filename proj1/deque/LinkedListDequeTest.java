@@ -182,4 +182,105 @@ public class LinkedListDequeTest {
         assertEquals(Integer.valueOf(3), lld.get(2));
         assertNull(lld.get(3)); // Out of bounds
     }
+    @Test
+    /**
+     * Tests the iterator on a basic deque to ensure it returns elements in the correct order.
+     */
+    public void iteratorBasicTest() {
+        LinkedListDeque<String> lld = new LinkedListDeque<>();
+        lld.addLast("A");
+        lld.addLast("B");
+        lld.addLast("C");
+
+        // The for-each loop implicitly uses the iterator.
+        // We can check if it returns the items in the expected order.
+        StringBuilder result = new StringBuilder();
+        for (String s : lld) {
+            result.append(s);
+        }
+        assertEquals("Iterator should traverse from first to last", "ABC", result.toString());
+    }
+
+    @Test
+    /**
+     * Completes the original test for iterating over a large deque.
+     */
+    public void bigIteratorTest() {
+        LinkedListDeque<Integer> lld = new LinkedListDeque<Integer>();
+        for (int i = 0; i < 1000000; i++) {
+            lld.addLast(i);
+        }
+
+        // We check if each element returned by the iterator matches its expected value.
+        int expectedValue = 0;
+        for (int actualValue : lld) {
+            assertEquals("The iterated value should match the expected value",
+                    Integer.valueOf(expectedValue), Integer.valueOf(actualValue));
+            expectedValue++;
+        }
+
+        // Final check to ensure we iterated through all one million elements.
+        assertEquals("The iterator should have traversed all 1,000,000 elements", 1000000, expectedValue);
+    }
+
+    @Test
+    /**
+     * Tests that the iterator works correctly for an empty deque.
+     */
+    public void iteratorEmptyTest() {
+        LinkedListDeque<String> lld = new LinkedListDeque<>();
+        int count = 0;
+        // This for-each loop should not execute its body at all.
+        for (String s : lld) {
+            count++;
+        }
+        assertEquals("Iterator on an empty deque should not run", 0, count);
+    }
+    @Test
+    /* Test the equals method with various scenarios */
+    public void equalsTest() {
+        ArrayDeque<Integer> ad1 = new ArrayDeque<>();
+        ArrayDeque<Integer> ad2 = new ArrayDeque<>();
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+
+        boolean b = ad1.equals(ad2);
+        // 1. Two empty deques should be equal
+        assertTrue("Two empty deques should be equal", ad1.equals(ad2));
+
+        ad1.addLast(1);
+        ad1.addLast(2);
+        ad1.addLast(3);
+
+        ad2.addLast(1);
+        ad2.addLast(2);
+        ad2.addLast(3);
+
+        lld1.addLast(1);
+        lld1.addLast(2);
+        lld1.addLast(3);
+
+        // 2. Two deques with the same content should be equal
+        assertTrue("Two deques with the same integer content should be equal", ad1.equals(ad2));
+
+        // 3. An ArrayDeque and a LinkedListDeque with the same content should be equal
+        assertTrue("An ArrayDeque and LinkedListDeque with the same content should be equal", ad1.equals(lld1));
+
+        // 4. Comparing a deque to itself should be true
+        assertTrue("Comparing a deque to itself should be true", ad1.equals(ad1));
+
+        // 5. Comparing to null should be false
+        assertFalse("Comparing to null should be false", ad1.equals(null));
+
+        // 6. Comparing to a different type of object should be false
+        assertFalse("Comparing to a non-deque object should be false", ad1.equals("a string"));
+
+        // 7. Deques with different content should not be equal
+        ad2.removeLast();
+        ad2.addLast(4); // ad2 is now [1, 2, 4]
+        assertFalse("Deques with different content should not be equal", ad1.equals(ad2));
+
+        // 8. Deques with different sizes should not be equal
+        ad2.removeLast(); // ad2 is now [1, 2]
+        assertFalse("Deques with different sizes should not be equal", ad1.equals(ad2));
+    }
 }
