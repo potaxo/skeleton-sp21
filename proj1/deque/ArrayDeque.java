@@ -17,6 +17,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
 
+    public int getFirst() {
+        return updateBoundary(nf + 1);
+    }
     /* public void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
         if (nl == 0 && nf ==  arraySize - 1) {
@@ -55,9 +58,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     public int updateBoundary(int n) {
         if (n < 0) {
-            return arraySize - 1;
+            return arraySize + n;
         } else if (n > arraySize - 1) {
-            return 0;
+            return n - arraySize;
         } else {
             return n;
         }
