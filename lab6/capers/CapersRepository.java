@@ -1,6 +1,5 @@
 package capers;
 
-import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,10 +37,16 @@ public class CapersRepository {
      *    - story -- file containing the current story
      */
     public static void setupPersistence() {
-        DOGS_FOLDER.mkdir();
+        if (!CAPERS_FOLDER.exists()) {
+            CAPERS_FOLDER.mkdirs();
+        }
+        if (!DOGS_FOLDER.exists()) {
+            DOGS_FOLDER.mkdirs();
+        }
         try {
-            if (!STORY_FILE.exists())
-            STORY_FILE.createNewFile();
+            if (!STORY_FILE.exists()) {
+                STORY_FILE.createNewFile();
+            }
         } catch (IOException excp) {
             System.out.println("Wrong in setupPersistence!");
         }
@@ -53,7 +58,9 @@ public class CapersRepository {
      * @param text String of the text to be appended to the story
      */
     public static void writeStory(String text) {
-        writeContents(STORY_FILE, text, "\n");
+        String str = readContentsAsString(STORY_FILE);
+        String cText = str + text;
+        writeContents(STORY_FILE, cText, "\n");
         try (Scanner scanner = new Scanner(STORY_FILE)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -73,7 +80,7 @@ public class CapersRepository {
      */
     public static void makeDog(String name, String breed, int age) {
         Dog dog = new Dog(name, breed, age);
-        dog.toString();
+        System.out.print(dog.toString());
         dog.saveDog();
     }
 
