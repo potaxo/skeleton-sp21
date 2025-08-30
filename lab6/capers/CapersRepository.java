@@ -1,25 +1,32 @@
 package capers;
 
+import org.junit.Test;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
+
 import static capers.Utils.*;
 
 /** A repository for Capers 
- * @author TODO
+ * @author potaxo
  * The structure of a Capers Repository is as follows:
  *
  * .capers/ -- top level folder for all persistent data in your lab12 folder
  *    - dogs/ -- folder containing all of the persistent data for dogs
  *    - story -- file containing the current story
  *
- * TODO: change the above structure if you do something different.
  */
 public class CapersRepository {
     /** Current Working Directory. */
     static final File CWD = new File(System.getProperty("user.dir"));
 
     /** Main metadata folder. */
-    static final File CAPERS_FOLDER = null; // TODO Hint: look at the `join`
+    static final File CAPERS_FOLDER = Utils.join(CWD, ".capers");
                                             //      function in Utils
+    static final File DOGS_FOLDER = Utils.join(CAPERS_FOLDER, "/dogs");
+    static File STORY_FILE = Utils.join(CAPERS_FOLDER, "/story.txt");
 
     /**
      * Does required filesystem operations to allow for persistence.
@@ -31,7 +38,13 @@ public class CapersRepository {
      *    - story -- file containing the current story
      */
     public static void setupPersistence() {
-        // TODO
+        DOGS_FOLDER.mkdir();
+        try {
+            if (!STORY_FILE.exists())
+            STORY_FILE.createNewFile();
+        } catch (IOException excp) {
+            System.out.println("Wrong in setupPersistence!");
+        }
     }
 
     /**
@@ -40,7 +53,17 @@ public class CapersRepository {
      * @param text String of the text to be appended to the story
      */
     public static void writeStory(String text) {
-        // TODO
+        writeContents(STORY_FILE, text, "\n");
+        try (Scanner scanner = new Scanner(STORY_FILE)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                System.out.println(line);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: File not found at " + "writeStory");
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -49,7 +72,9 @@ public class CapersRepository {
      * Also prints out the dog's information using toString().
      */
     public static void makeDog(String name, String breed, int age) {
-        // TODO
+        Dog dog = new Dog(name, breed, age);
+        dog.toString();
+        dog.saveDog();
     }
 
     /**
@@ -59,6 +84,8 @@ public class CapersRepository {
      * @param name String name of the Dog whose birthday we're celebrating.
      */
     public static void celebrateBirthday(String name) {
-        // TODO
+        Dog dog = Dog.fromFile(name);
+        dog.haveBirthday();
+        dog.saveDog();
     }
 }
