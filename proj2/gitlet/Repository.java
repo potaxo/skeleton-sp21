@@ -24,9 +24,9 @@ public class Repository {
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The .gitlet directory. */
-    public static final File GITLET_DIR = join(CWD, ".gitlet");
-    public static final File COMMIT_DIR = join(GITLET_DIR, "commit");
-    public static final File BLOBS_DIR = join(GITLET_DIR, "blobs");
+    public static final File GITLET_DIR = Utils.join(CWD, ".gitlet");
+    public static final File COMMIT_DIR = Utils.join(GITLET_DIR, "commit");
+    public static final File BLOBS_DIR = Utils.join(GITLET_DIR, "blobs");
     public static final File INDEX_FILE = Utils.join(GITLET_DIR, "index");
 
     /* TODO: fill in the rest of this class. */
@@ -45,15 +45,13 @@ public class Repository {
     /* TODO: Set up branches */
     /* TODO: set the HEAD pointer to point the main branch. */
     /* TODO: Set up index folder */
-        System.out.println("Initialized empty Gitlet repository in "
-                + GITLET_DIR.getAbsolutePath());
     }
 
     public static void addCommand(String filename) {
         /* Get and check sourceFile */
-        File sourceFile = Utils.join(CWD, "filename");
+        File sourceFile = Utils.join(CWD, filename);
         if (!sourceFile.exists()) {
-            System.out.println("File does not exist");
+            System.out.println(sourceFile +" does not exist");
             return;
         }
 
