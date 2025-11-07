@@ -32,7 +32,7 @@ public class Main {
             case "commit":
                 validateNumArgs("commit", args, 2);
                 String message = args[1];
-                // Repository.commitCommand(message);
+                Repository.commitCommand(message);
                 break;
             // TODO: FILL THE REST IN
 
