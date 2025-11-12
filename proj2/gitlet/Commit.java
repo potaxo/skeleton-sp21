@@ -1,5 +1,6 @@
 package gitlet;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.TreeMap;
@@ -49,5 +50,18 @@ public class Commit implements Serializable {
 
     public Date getDate() {
         return this.date;
+    }
+
+    public void mergeFileMap(TreeMap map) {
+        this.fileMap.putAll(map);
+    }
+
+    /* return the hash of the commit is saved */
+    public String save() {
+        byte[] commitBytes = Utils.serialize(this);
+        String commitHash = Utils.sha1(commitBytes);
+        File commitFile = Utils.join(Repository.COMMITS_DIR, commitHash);
+        Utils.writeObject(commitFile, this);
+        return commitHash;// Use writeObject from Utils
     }
 }

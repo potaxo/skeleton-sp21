@@ -22,17 +22,36 @@ public class Main {
                 }
                 Repository.initCommand();
                 break;
+
             case "add":
                 // handle the `add [filename]` command
-                if (!validateNumArgs("add", args, 2))
+                if (!validateNumArgs("add", args, 2)) {
                     System.out.println("Incorrect operands, args should be 2");
+                    return;
+                }
                 String filename = args[1];
                 Repository.addCommand(filename);
                 break;
+
             case "commit":
+                if (args.length == 1) {
+                    System.out.println("Please enter a commit message.");
+                    return;
+                } else if (Index.isIndexEmpty()) {
+                    System.out.println("No changes added to the commit.");
+                    return;
+                }
                 validateNumArgs("commit", args, 2);
                 String message = args[1];
                 Repository.commitCommand(message);
+                break;
+
+            case "rm":
+                if (!validateNumArgs("rm", args, 2)) {
+                    System.out.println("Incorrect operands."); // Or your preferred message
+                    return;
+                }
+                Repository.rmCommand(args[1]);
                 break;
             // TODO: FILL THE REST IN
 

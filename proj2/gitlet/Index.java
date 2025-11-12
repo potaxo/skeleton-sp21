@@ -34,7 +34,35 @@ public class Index implements Serializable {
         filesToAdd.put(filename, sha1hash);
     }
 
+    /**
+     * Stages a file for removal.
+     * @param filename The name of the file to remove.
+     */
+    public void stageForRemoval(String filename) {
+        // Add the filename (e.g., "test.txt") to the removal set.
+        filesToRemove.add(filename);
+    }
+
     public void save() {
         Utils.writeObject(INDEX_FILE, this);
+    }
+
+    // TODO: need to be filled
+    public void clear() {
+        filesToAdd = null;
+        filesToRemove = null;
+    }
+
+    private boolean isIndexEmptyHelper() {
+        if (this.filesToAdd.isEmpty() && this.filesToRemove.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isIndexEmpty() {
+        Index index = Index.load();
+        return index.isIndexEmptyHelper();
     }
 }
