@@ -3,6 +3,7 @@ package gitlet;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.TreeMap;
 
 /** Represents a gitlet commit object.
@@ -24,20 +25,21 @@ public class Commit implements Serializable {
     private final TreeMap<String, String> fileMap;
 
 
-    public Commit(String message, String parentHash, TreeMap<String, String> fileMap) {
+    public Commit(String message, String parentHash, String secondParentHash, TreeMap<String, String> fileMap) {
         this.message = message;
         this.firstParentHash = parentHash;
+        this.secondParentHash = secondParentHash; // Set the second parent
         this.fileMap = fileMap;
 
-        // This is how you set the time!
-        // The spec requires the initial commit (which has a null parent)
-        // to have a special timestamp of 0 (the "epoch").
         if (parentHash == null) {
-            this.date = new Date(0); // The epoch (0 milliseconds)
+            this.date = new Date(0);
         } else {
-            // For all other commits, use the current time.
             this.date = new Date();
         }
+    }
+
+    public String getSecondParentHash() {
+        return secondParentHash;
     }
 
     public String getParentHash() {
@@ -52,10 +54,6 @@ public class Commit implements Serializable {
         return this.date;
     }
 
-    public void mergeFileMap(TreeMap map) {
-        this.fileMap.putAll(map);
-    }
-
     /* return the hash of the commit is saved */
     public String save() {
         byte[] commitBytes = Utils.serialize(this);
@@ -64,4 +62,9 @@ public class Commit implements Serializable {
         Utils.writeObject(commitFile, this);
         return commitHash;// Use writeObject from Utils
     }
+    // In Commit.java
+    public String getMessage() {
+        return this.message;
+    }
+
 }

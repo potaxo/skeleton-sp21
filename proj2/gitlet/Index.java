@@ -21,6 +21,10 @@ public class Index implements Serializable {
         return filesToAdd;
     }
 
+    public HashSet<String> getFilesToRemove() {
+        return filesToRemove;
+    }
+
     // TODO: Remove stage
 
     public static Index load() {
@@ -49,8 +53,8 @@ public class Index implements Serializable {
 
     // TODO: need to be filled
     public void clear() {
-        filesToAdd = null;
-        filesToRemove = null;
+        filesToAdd = new TreeMap<>();
+        filesToRemove = new HashSet<>();
     }
 
     private boolean isIndexEmptyHelper() {

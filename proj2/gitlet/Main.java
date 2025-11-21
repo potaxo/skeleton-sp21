@@ -53,6 +53,80 @@ public class Main {
                 }
                 Repository.rmCommand(args[1]);
                 break;
+            // --- ADD THESE NEW CASES ---
+            case "log":
+                if (!validateNumArgs("log", args, 1)) {
+                    System.out.println("Incorrect operands.");
+                    return;
+                }
+                Repository.logCommand();
+                break;
+
+            case "global-log":
+                if (!validateNumArgs("global-log", args, 1)) {
+                    System.out.println("Incorrect operands.");
+                    return;
+                }
+                Repository.globalLogCommand();
+                break;
+
+            case "find":
+                if (!validateNumArgs("find", args, 2)) {
+                    System.out.println("Incorrect operands.");
+                    return;
+                }
+                Repository.findCommand(args[1]);
+                break;
+
+            case "branch":
+                if (!validateNumArgs("branch", args, 2)) {
+                    System.out.println("Incorrect operands.");
+                    return;
+                }
+                Repository.branchCommand(args[1]);
+                break;
+
+            case "checkout":
+                // Case 3: checkout [branch name] (length 2)
+                if (args.length == 2) {
+                    Repository.checkoutBranch(args[1]);
+                }
+                // Case 1: checkout -- [file name] (length 3)
+                else if (args.length == 3) {
+                    if (!args[1].equals("--")) {
+                        System.out.println("Incorrect operands.");
+                        return;
+                    }
+                    Repository.checkoutFileFromHead(args[2]);
+                }
+                // Case 2: checkout [commit id] -- [file name] (length 4)
+                else if (args.length == 4) {
+                    if (!args[2].equals("--")) {
+                        System.out.println("Incorrect operands.");
+                        return;
+                    }
+                    Repository.checkoutFileFromCommit(args[1], args[3]);
+                }
+                else {
+                    System.out.println("Incorrect operands.");
+                }
+                break;
+
+            case "rm-branch":
+                if (!validateNumArgs("rm-branch", args, 2)) {
+                    System.out.println("Incorrect operands.");
+                    return;
+                }
+                Repository.rmBranchCommand(args[1]);
+                break;
+
+            case "reset":
+                if (!validateNumArgs("reset", args, 2)) {
+                    System.out.println("Incorrect operands.");
+                    return;
+                }
+                Repository.resetCommand(args[1]);
+                break;
             // TODO: FILL THE REST IN
 
             default:
